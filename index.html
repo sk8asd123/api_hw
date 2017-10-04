@@ -20,18 +20,129 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
         <script src="js/vendor/modernizr-3.5.0.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-        <script>
-            window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
-            ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+        <body>
+
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid" id="navigation-bar">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Programming GIFS</a>
+                </div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">search term</span>
+                <input type="text" class="form-control" placeholder="search" id="answer_input">
+            </div>
+        </nav>
+
+
+        <div id="gifs-appear-here">
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+//        function getInput() {
+//            "use strict";
+//            var userInput = document.getElementById("answer_input").value;
+//            console.log(userInput);
+//            if (code === 13) {
+//                // clears value for next input
+//                document.getElementById("answer_input").value = "";
+//            }
+//        }
+
+            var imageLimit = 10;
+
+            function createButtons() {
+                var topics = ["CPP", "JavaScript", "Clojure", "Haskell", "Prolog", "Java", "Scala", "Fortran", "SQL"];
+
+                for (language in topics) {
+                    var btn = document.createElement("BUTTON");
+                    btn.setAttribute("data-language", topics[language]);
+                    btn.setAttribute("data-state", "still");
+                    btn.setAttribute("class", "btn btn-info navbar-btn");
+                    var t = document.createTextNode(topics[language]);
+                    btn.appendChild(t);
+                    $("#navigation-bar").prepend(btn);
+                }
+            }
+
+            createButtons();
+
+            $("button").on("click", function() {
+                var language = $(this).attr("data-language");
+
+                var state = $(this).attr("data_state");
+                if (state === "still") {
+                    $(this).attr("src", $(this).attr("data_animate"));
+                    $(this).attr("data_state", "animate");
+                } else {
+                    $(this).attr("src", $(this).attr("data_still"));
+                    $(this).attr("data_state", "still");
+                }
+
+                // Constructing a URL to search Giphy for the name of the person who said the quote
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                    language + "&api_key=dc6zaTOxFJmzC&limit=" + imageLimit;
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                })
+                    .done(function(response) {
+                        var results = response.data;
+
+                        for (var i = 0; i < results.length; i++) {
+
+                            // Only taking action if the photo has an appropriate rating
+                            if (results[i].rating == "pg" || results[i].rating == "g") {
+                                var gifDiv = $("<div class='item'>");
+
+                                var p = $("<p>").text(language + " Rating: " + results[i].rating);
+
+                                // Creating an image tag
+                                var languageImage = $("<img>");
+
+                                languageImage.attr("src", results[i].images.fixed_height_still.url);
+                                languageImage.data("data-still", results[i].images.fixed_height_still.url);
+                                languageImage.data("data-state", "animate");
+                                languageImage.data("data-animate", results[i].images.fixed_height.url);
+                                languageImage.data("class", "gif");
+
+                                languageImage.on("mouseenter",animate);
+                                languageImage.on("mouseleave", still);
+                                gifDiv.append(p);
+                                gifDiv.append(languageImage);
+
+                                $("#gifs-appear-here").prepend(gifDiv);
+                            }
+                        }
+                    });
+            });
+
+            function animate() {
+                var animatedURL = $(this).data("data-animate");
+                $(this).attr("src",animatedURL);
+                $(this).data("state", "animate");
+            }
+
+            function still(){
+                var stillURL = $(this).data("data-still");
+                $(this).attr("src",stillURL);
+                $(this).data("state", "still");
+            }
+
+
         </script>
-        <script src="https://www.google-analytics.com/analytics.js" async defer></script>
     </body>
 </html>
