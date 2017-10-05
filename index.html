@@ -31,45 +31,35 @@
                     <a class="navbar-brand" href="#">Programming GIFS</a>
                 </div>
             </div>
-            <div class="input-wrapper empty">
-                <input type="text" class="query" id="query_input"/>
-                <div class="loader"></div>
-                <div class="clear"></div>
-            </div>
         </nav>
-
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search" id="search-input">
+        </div>
+        <button type="submit" class="btn btn-default" id="search-btn" onclick="search()">Submit</button>
 
         <div id="gifs-appear-here">
         </div>
 
         <script type="text/javascript">
 
-//            var $queryInput = $('.query');
-//            console.log($queryInput.val());
+            var topics = ["CPP", "JavaScript", "Clojure", "Haskell", "Prolog", "Java", "Scala", "Fortran", "SQL"];
+            createButtons();
 
-//            if (code === 13) {
-//                // clears value for next input
-//                getInput()
-//                document.getElementById("answer_input").value = "";
-//            }
-//
-//            function getInput() {
-//                "use strict";
-//                var userInput = document.getElementById("answer_input").value;
-//                console.log(userInput);
 
-//            }
-
-            $("#click-button").on("click", function() {
-                var userInput = document.getElementById("query_input").value;
+            function search()  {
+                var userInput = document.getElementById("search-input").value;
                 console.log(userInput);
-            });
+                console.log("i am clicked");
+                topics.push(userInput);
+                console.log(topics);
+                createButtons();
+                $("#search-input").val(" ");
+            };
 
 
             var imageLimit = 10;
-
             function createButtons() {
-                var topics = ["CPP", "JavaScript", "Clojure", "Haskell", "Prolog", "Java", "Scala", "Fortran", "SQL"];
+                $("#navigation-bar").empty();
 
                 for (language in topics) {
                     var btn = document.createElement("BUTTON");
@@ -77,15 +67,21 @@
                     btn.setAttribute("data-state", "still");
                     btn.setAttribute("class", "btn btn-info navbar-btn");
                     var t = document.createTextNode(topics[language]);
+                    console.log(t);
                     btn.appendChild(t);
                     $("#navigation-bar").prepend(btn);
+
                 }
+                $("button").on("click", displayGiph);
+                console.log(topics);
             }
 
-            createButtons();
 
-            $("button").on("click", function() {
+//            $("button").on("click", function() {
+            function displayGiph() {
+                console.log("button click");
                 var language = $(this).attr("data-language");
+                console.log(language)
 
                 var state = $(this).attr("data_state");
                 if (state === "still") {
@@ -133,7 +129,7 @@
                             }
                         }
                     });
-            });
+            };
 
             function animate() {
                 var animatedURL = $(this).data("data-animate");
