@@ -13,23 +13,17 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- Add your site or application content here -->
+        <script src="js/vendor/modernizr-3.5.0.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <body>
         <!--[if lte IE 9]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
 
-        <!-- Add your site or application content here -->
-        <script src="js/vendor/modernizr-3.5.0.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
-        <script src="js/plugins.js"></script>
-        <script src="js/main.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-        <body>
 
         <nav class="navbar navbar-inverse">
             <div class="container-fluid" id="navigation-bar">
@@ -37,9 +31,10 @@
                     <a class="navbar-brand" href="#">Programming GIFS</a>
                 </div>
             </div>
-            <div class="input-group">
-                <span class="input-group-addon">search term</span>
-                <input type="text" class="form-control" placeholder="search" id="answer_input">
+            <div class="input-wrapper empty">
+                <input type="text" class="query" id="query_input"/>
+                <div class="loader"></div>
+                <div class="clear"></div>
             </div>
         </nav>
 
@@ -47,19 +42,29 @@
         <div id="gifs-appear-here">
         </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
 
+//            var $queryInput = $('.query');
+//            console.log($queryInput.val());
 
-//        function getInput() {
-//            "use strict";
-//            var userInput = document.getElementById("answer_input").value;
-//            console.log(userInput);
 //            if (code === 13) {
 //                // clears value for next input
+//                getInput()
 //                document.getElementById("answer_input").value = "";
 //            }
-//        }
+//
+//            function getInput() {
+//                "use strict";
+//                var userInput = document.getElementById("answer_input").value;
+//                console.log(userInput);
+
+//            }
+
+            $("#click-button").on("click", function() {
+                var userInput = document.getElementById("query_input").value;
+                console.log(userInput);
+            });
+
 
             var imageLimit = 10;
 
@@ -91,7 +96,7 @@
                     $(this).attr("data_state", "still");
                 }
 
-                // Constructing a URL to search Giphy for the name of the person who said the quote
+                // Constructing a URL to search Giphy
                 var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
                     language + "&api_key=dc6zaTOxFJmzC&limit=" + imageLimit;
 
